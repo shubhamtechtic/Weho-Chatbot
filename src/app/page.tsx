@@ -1,4 +1,5 @@
 
+
 'use client';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
@@ -13,6 +14,7 @@ import FindYourDistrictPage from "./find-your-district/page";
 import { ArrowLeft, ArrowRight, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import { Logoipsum } from "@/components/logoipsum";
+import { AvailableProperties } from "@/components/available-properties";
 
 
 const suggestedQuestions = [
@@ -235,6 +237,8 @@ export default function Home() {
             </div>
         </div>
       </div>
+
+      <AvailableProperties />
 
       <div id="grant-finder">
         <GrantFinderPage />
