@@ -189,9 +189,28 @@ export default function Home() {
             </div>
         </div>
       </div>
+      
+      <div className="py-16 md:py-24 lg:py-32 text-center">
+        <h2 className="text-4xl font-bold tracking-tight mb-12">Awards</h2>
+        <div className="container mx-auto px-4 md:px-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <Card className="h-40 bg-secondary/50"></Card>
+                <Card className="h-40 bg-secondary/50"></Card>
+                <Card className="h-40 bg-secondary/50"></Card>
+                <Card className="h-40 bg-secondary/50"></Card>
+            </div>
+        </div>
+      </div>
 
       <div className="py-16 md:py-24 lg:py-32 bg-secondary/50">
         <div className="container mx-auto px-4 md:px-6">
+            <div className="flex justify-between items-center mb-12">
+                <h2 className="text-4xl font-bold tracking-tight">News</h2>
+                <div className="flex gap-4">
+                    <Button variant="outline" size="icon"><ArrowLeft /></Button>
+                    <Button variant="outline" size="icon"><ArrowRight /></Button>
+                </div>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {testimonials.map((testimonial, index) => (
                     <Card key={index} className="p-6">
