@@ -22,6 +22,7 @@ const navLinks = [
         items: [
             { label: 'Overview', href: '/incentives' },
             { label: 'Testimonials', href: '#' },
+            { label: 'Find Your District', href: '/find-your-district' },
         ]
     },
     { 
@@ -51,6 +52,7 @@ const allLinks = [
     { label: 'Grant Finder', href: '/grant-finder', isTitle: false },
     { label: 'AI Advisor', href: '/incentive-advisor', isTitle: false },
     { label: 'Resources', href: '/resources', isTitle: false },
+    { label: 'Find Your District', href: '/find-your-district', isTitle: false },
 ].filter((obj, index, self) => index === self.findIndex(o => o.label === obj.label && o.href === obj.href));
 
 

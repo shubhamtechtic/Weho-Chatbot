@@ -1,3 +1,4 @@
+
 import type { LucideIcon } from 'lucide-react';
 
 export type Incentive = {
@@ -16,3 +17,10 @@ export type Resource = {
   phone: string;
   avatar: string;
 };
+
+export type District = {
+    name: string;
+    description: string;
+    image: string;
+    link: string;
+}
