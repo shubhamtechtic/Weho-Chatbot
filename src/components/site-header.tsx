@@ -20,26 +20,26 @@ const navLinks = [
         label: 'Why West Hollywood', 
         href: '#',
         items: [
-            { label: 'Overview', href: '/incentives' },
+            { label: 'Overview', href: '/#incentives' },
             { label: 'Testimonials', href: '#' },
-            { label: 'Find Your District', href: '/find-your-district' },
+            { label: 'Find Your District', href: '/#find-your-district' },
         ]
     },
     { 
         label: 'Starting in WeHo',
         href: '#',
         items: [
-            { label: 'Grant Finder', href: '/grant-finder' },
-            { label: 'Pre-Application', href: '/pre-application' },
-            { label: 'AI Advisor', href: '/incentive-advisor' },
+            { label: 'Grant Finder', href: '/#grant-finder' },
+            { label: 'Pre-Application', href: '/#pre-application' },
+            { label: 'AI Advisor', href: '/#incentive-advisor' },
         ]
     },
     { 
         label: 'For Existing Businesses', 
         href: '#',
         items: [
-             { label: 'Incentives', href: '/incentives' },
-             { label: 'Resource Directory', href: '/resources' },
+             { label: 'Incentives', href: '/#incentives' },
+             { label: 'Resource Directory', href: '/#resources' },
         ]
     },
 ];
@@ -47,12 +47,12 @@ const navLinks = [
 const allLinks = [
     ...navLinks.flatMap(l => l.items ? [{label: l.label, href: l.href, isTitle: true}, ...l.items] : [{...l, isTitle: false}]),
     { label: 'Dashboard', href: '/', isTitle: false},
-    { label: 'Pre-Application', href: '/pre-application', isTitle: false},
-    { label: 'Incentives', href: '/incentives', isTitle: false },
-    { label: 'Grant Finder', href: '/grant-finder', isTitle: false },
-    { label: 'AI Advisor', href: '/incentive-advisor', isTitle: false },
-    { label: 'Resources', href: '/resources', isTitle: false },
-    { label: 'Find Your District', href: '/find-your-district', isTitle: false },
+    { label: 'Pre-Application', href: '/#pre-application', isTitle: false},
+    { label: 'Incentives', href: '/#incentives', isTitle: false },
+    { label: 'Grant Finder', href: '/#grant-finder', isTitle: false },
+    { label: 'AI Advisor', href: '/#incentive-advisor', isTitle: false },
+    { label: 'Resources', href: '/#resources', isTitle: false },
+    { label: 'Find Your District', href: '/#find-your-district', isTitle: false },
 ].filter((obj, index, self) => index === self.findIndex(o => o.label === obj.label && o.href === obj.href));
 
 
@@ -60,7 +60,7 @@ export function SiteHeader() {
   const pathname = usePathname();
 
   return (
-    <header className="w-full">
+    <header className="w-full sticky top-0 z-50 bg-background/95 backdrop-blur-sm">
       <div className="bg-primary text-primary-foreground text-center text-sm p-2">
         <Link href="#" className="hover:underline">
             Looking for a pop-up permit? Apply here <ArrowRight className="inline h-4 w-4" />
@@ -113,7 +113,7 @@ export function SiteHeader() {
                             className={cn(
                                 "font-medium hover:text-primary",
                                 link.isTitle ? "text-lg text-muted-foreground mt-2" : "text-md",
-                                pathname === link.href && !link.isTitle && "text-primary"
+                                ((pathname === '/' && link.href.startsWith('/#')) || pathname === link.href) && !link.isTitle && "text-primary"
                             )}
                          >
                             {link.label}

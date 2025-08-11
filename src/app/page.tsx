@@ -3,6 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import IncentivesPage from "./incentives/page";
+import GrantFinderPage from "./grant-finder/page";
+import PreApplicationPage from "./pre-application/page";
+import IncentiveAdvisorPage from "./incentive-advisor/page";
+import ResourcesPage from "./resources/page";
+import FindYourDistrictPage from "./find-your-district/page";
+
 
 const suggestedQuestions = [
     { text: "How do I get a business license?", href: "/pre-application" },
@@ -12,36 +19,53 @@ const suggestedQuestions = [
 
 export default function Home() {
     const router = useRouter();
-    const handleQuestionClick = (href: string) => {
-        router.push(href);
-    }
   return (
-    <div className="flex flex-col items-center justify-center text-center flex-1 py-16 md:py-24 lg:py-32">
-        <div className="container px-4 md:px-6">
-            <div className="max-w-3xl mx-auto">
-                <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter uppercase">
-                    Culture comes first
-                </h1>
-                <h2 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter uppercase">
-                    West Hollywood
-                </h2>
-                <p className="mt-6 text-lg md:text-xl text-muted-foreground max-w-xl mx-auto">
-                    The creative soul of LA is open for business. Launch, grow, and thrive at the epicenter of it all.
-                </p>
-            </div>
-            <Card className="mt-12 max-w-2xl mx-auto text-left p-6 bg-card/50">
-                <CardContent className="p-0">
-                    <p className="font-semibold mb-4">Ask a question</p>
-                    <div className="flex flex-col sm:flex-row gap-2">
-                        {suggestedQuestions.map((q) => (
-                             <Button key={q.text} variant="secondary" className="justify-start sm:justify-center flex-1" asChild>
+    <>
+      <div className="flex flex-col items-center justify-center text-center flex-1 py-16 md:py-24 lg:py-32">
+          <div className="container px-4 md:px-6">
+              <div className="max-w-3xl mx-auto">
+                  <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter uppercase">
+                      Culture comes first
+                  </h1>
+                  <h2 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter uppercase">
+                      West Hollywood
+                  </h2>
+                  <p className="mt-6 text-lg md:text-xl text-muted-foreground max-w-xl mx-auto">
+                      The creative soul of LA is open for business. Launch, grow, and thrive at the epicenter of it all.
+                  </p>
+              </div>
+              <Card className="mt-12 max-w-2xl mx-auto text-left p-6 bg-card/50">
+                  <CardContent className="p-0">
+                      <p className="font-semibold mb-4">Ask a question</p>
+                      <div className="flex flex-col sm:flex-row gap-2">
+                          {suggestedQuestions.map((q) => (
+                              <Button key={q.text} variant="secondary" className="justify-start sm:justify-center flex-1" asChild>
                                 <Link href={q.href}>{q.text}</Link>
-                             </Button>
-                        ))}
-                    </div>
-                </CardContent>
-            </Card>
-        </div>
-    </div>
+                              </Button>
+                          ))}
+                      </div>
+                  </CardContent>
+              </Card>
+          </div>
+      </div>
+      <div id="find-your-district">
+        <FindYourDistrictPage />
+      </div>
+      <div id="grant-finder">
+        <GrantFinderPage />
+      </div>
+      <div id="pre-application">
+        <PreApplicationPage />
+      </div>
+      <div id="incentive-advisor">
+        <IncentiveAdvisorPage />
+      </div>
+      <div id="incentives">
+        <IncentivesPage />
+      </div>
+      <div id="resources">
+        <ResourcesPage />
+      </div>
+    </>
   );
 }
