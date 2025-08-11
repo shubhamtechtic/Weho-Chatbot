@@ -303,12 +303,6 @@ export default function Home() {
       <div id="pre-application">
         <PreApplicationPage />
       </div>
-      <div id="incentive-advisor">
-        <IncentiveAdvisorPage />
-      </div>
-      <div id="incentives">
-        <IncentivesPage />
-      </div>
       <div id="resources">
         <ResourcesPage />
       </div>
