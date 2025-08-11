@@ -1,5 +1,4 @@
 
-
 'use client';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
@@ -15,9 +14,9 @@ import { SiteFooter } from "@/components/site-footer";
 
 
 const suggestedQuestions = [
-    { text: "How do I get a business license?", href: "/#pre-application" },
-    { text: "Are there any incentives?", href: "/#incentives" },
-    { text: "What district best fits my business?", href: "/#find-your-district" },
+    { text: "How do I get a business license?", href: "/pre-application" },
+    { text: "Are there any incentives?", href: "/incentives" },
+    { text: "What district best fits my business?", href: "/find-your-district" },
 ]
 
 const stats = [
@@ -91,18 +90,9 @@ export default function Home() {
                       The creative soul of LA is open for business. Launch, grow, and thrive at the epicenter of it all.
                   </p>
               </div>
-              <Card className="mt-12 max-w-2xl mx-auto text-left p-6 bg-card/50">
-                  <CardContent className="p-0">
-                      <p className="font-semibold mb-4">Ask a question</p>
-                      <div className="flex flex-col sm:flex-row gap-2">
-                          {suggestedQuestions.map((q) => (
-                              <Button key={q.text} variant="secondary" className="justify-start sm:justify-center flex-1" asChild>
-                                <Link href={q.href}>{q.text}</Link>
-                              </Button>
-                          ))}
-                      </div>
-                  </CardContent>
-              </Card>
+              <div className="mt-12 max-w-2xl mx-auto">
+                <AskQuestionForm />
+              </div>
           </div>
       </div>
       <div className="bg-gray-800 text-white py-16 px-4 md:px-6 text-center">
