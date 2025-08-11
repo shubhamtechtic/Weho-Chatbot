@@ -5,10 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import IncentivesPage from "./incentives/page";
 import GrantFinderPage from "./grant-finder/page";
-import PreApplicationPage from "./pre-application/page";
-import IncentiveAdvisorPage from "./incentive-advisor/page";
 import ResourcesPage from "./resources/page";
 import FindYourDistrictPage from "./find-your-district/page";
 import { ArrowLeft, ArrowRight, ShieldCheck } from "lucide-react";
@@ -270,6 +267,7 @@ export default function Home() {
                            <div className="flex-grow">
                              <h3 className="text-xl font-bold mb-2">{testimonial.headline}</h3>
                              <p className="text-muted-foreground mb-4">{testimonial.text}</p>
+
                            </div>
                            <div>
                             <Logoipsum className="h-8 w-auto mb-4" />
@@ -299,9 +297,6 @@ export default function Home() {
 
       <div id="grant-finder">
         <GrantFinderPage />
-      </div>
-      <div id="pre-application">
-        <PreApplicationPage />
       </div>
       <div id="resources">
         <ResourcesPage />
