@@ -16,6 +16,7 @@ import Image from "next/image";
 import { Logoipsum } from "@/components/logoipsum";
 import { AvailableProperties } from "@/components/available-properties";
 import { AskQuestionForm } from "@/components/ask-question-form";
+import { NewsletterSignUp } from "@/components/newsletter-signup";
 
 
 const suggestedQuestions = [
@@ -190,6 +191,28 @@ export default function Home() {
             </div>
         </div>
       </div>
+
+      <div className="py-16 md:py-24 lg:py-32 bg-secondary/50">
+        <div className="container mx-auto px-4 md:px-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {testimonials.map((testimonial, index) => (
+                    <Card key={index} className="p-6">
+                        <CardContent className="p-0 flex flex-col h-full">
+                           <div className="flex-grow">
+                             <h3 className="text-xl font-bold mb-2">{testimonial.headline}</h3>
+                             <p className="text-muted-foreground mb-4">{testimonial.text}</p>
+                           </div>
+                           <div>
+                            <Logoipsum className="h-8 w-auto mb-4" />
+                            <p className="font-semibold">{testimonial.author.name}</p>
+                            <p className="text-sm text-muted-foreground">{testimonial.author.title}</p>
+                           </div>
+                        </CardContent>
+                    </Card>
+                ))}
+            </div>
+        </div>
+      </div>
       
       <div id="find-your-district">
         <FindYourDistrictPage />
@@ -271,6 +294,8 @@ export default function Home() {
             </div>
         </div>
       </div>
+
+      <NewsletterSignUp />
 
       <div id="grant-finder">
         <GrantFinderPage />
