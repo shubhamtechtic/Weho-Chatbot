@@ -18,6 +18,13 @@ const suggestedQuestions = [
     { text: "What district best fits my business?", href: "/#find-your-district" },
 ]
 
+const stats = [
+    { value: '1.9 mi²', description: 'walkable and transit-rich city' },
+    { value: '33,000', description: 'residents with global reach and diverse talent' },
+    { value: '4 M+', description: 'visitors yearly fuel retail and nightlife' },
+    { value: '$1.73 B', description: 'visitor spend drives the local economy' },
+];
+
 export default function Home() {
     const router = useRouter();
   return (
@@ -58,6 +65,27 @@ export default function Home() {
             <Button asChild className="mt-8" variant="secondary">
                 <Link href="#">Apply</Link>
             </Button>
+        </div>
+      </div>
+       <div className="py-16 md:py-24 lg:py-32 bg-secondary/50">
+        <div className="container mx-auto px-4 md:px-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+                {stats.map((stat) => (
+                    <Card key={stat.value} className="p-6">
+                        <CardContent className="p-0">
+                            <p className="text-4xl font-bold">{stat.value}</p>
+                            <p className="text-muted-foreground mt-2">{stat.description}</p>
+                        </CardContent>
+                    </Card>
+                ))}
+            </div>
+            <div className="mt-16 text-center max-w-2xl mx-auto">
+                <h2 className="text-4xl font-bold tracking-tight">Small city, big impact</h2>
+                <p className="mt-4 text-lg text-muted-foreground">
+                    West Hollywood champions a vibrant creative economy, world-leading arts programs, and inclusive policies that welcome every entrepreneur.
+                </p>
+                <Button variant="outline" className="mt-8">Learn More</Button>
+            </div>
         </div>
       </div>
       <div id="find-your-district">
