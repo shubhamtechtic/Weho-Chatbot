@@ -28,6 +28,33 @@ const stats = [
     { value: '$1.73 B', description: 'visitor spend drives the local economy' },
 ];
 
+const testimonials = [
+    {
+        headline: 'Headline',
+        text: 'Vestibulum nam nunc bibendum mauris. Id vel facilisis blandit leo viverra ultrices. Vitae dignissim.',
+        author: {
+            name: 'Name Surname',
+            title: 'JOB TITLE',
+        }
+    },
+    {
+        headline: 'Headline',
+        text: 'Vestibulum nam nunc bibendum mauris. Id vel facilisis blandit leo viverra ultrices. Vitae dignissim.',
+        author: {
+            name: 'Name Surname',
+            title: 'JOB TITLE',
+        }
+    },
+    {
+        headline: 'Headline',
+        text: 'Vestibulum nam nunc bibendum mauris. Id vel facilisis blandit leo viverra ultrices. Vitae dignissim.',
+        author: {
+            name: 'Name Surname',
+            title: 'JOB TITLE',
+        }
+    }
+]
+
 export default function Home() {
     const router = useRouter();
   return (
@@ -137,6 +164,28 @@ export default function Home() {
                         </div>
                     </Card>
                 </div>
+            </div>
+        </div>
+      </div>
+
+      <div className="py-16 md:py-24 lg:py-32 bg-secondary/50">
+        <div className="container mx-auto px-4 md:px-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {testimonials.map((testimonial, index) => (
+                    <Card key={index} className="p-6">
+                        <CardContent className="p-0 flex flex-col h-full">
+                           <div className="flex-grow">
+                             <h3 className="text-xl font-bold mb-2">{testimonial.headline}</h3>
+                             <p className="text-muted-foreground mb-4">{testimonial.text}</p>
+                           </div>
+                           <div>
+                            <Logoipsum className="h-8 w-auto mb-4" />
+                            <p className="font-semibold">{testimonial.author.name}</p>
+                            <p className="text-sm text-muted-foreground">{testimonial.author.title}</p>
+                           </div>
+                        </CardContent>
+                    </Card>
+                ))}
             </div>
         </div>
       </div>
