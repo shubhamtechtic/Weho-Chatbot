@@ -16,7 +16,7 @@ import Image from "next/image";
 import { Logoipsum } from "@/components/logoipsum";
 import { AvailableProperties } from "@/components/available-properties";
 import { AskQuestionForm } from "@/components/ask-question-form";
-import { NewsletterSignUp } from "@/components/newsletter-signup";
+import { SiteFooter } from "@/components/site-footer";
 
 
 const suggestedQuestions = [
@@ -295,7 +295,7 @@ export default function Home() {
         </div>
       </div>
 
-      <NewsletterSignUp />
+      <SiteFooter />
 
       <div id="grant-finder">
         <GrantFinderPage />
