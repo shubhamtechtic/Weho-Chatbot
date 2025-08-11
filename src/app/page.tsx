@@ -88,6 +88,28 @@ export default function Home() {
             </div>
         </div>
       </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 text-white">
+        <div className="bg-gray-800 p-12 lg:p-16 flex flex-col justify-center">
+            <h2 className="text-3xl font-bold tracking-tight">Start a business in WeHo</h2>
+            <p className="mt-4 text-lg text-gray-300">
+                From permits to ribbon-cutting, get a step-by-step startup playbook, fee waivers for green businesses, and free talent recruiting through the WeHo Employee Service & Training Office.
+            </p>
+            <Button asChild className="mt-8" variant="secondary">
+                <Link href="#">Learn More</Link>
+            </Button>
+        </div>
+        <div className="bg-gray-700 p-12 lg:p-16 flex flex-col justify-center">
+            <h2 className="text-3xl font-bold tracking-tight">Expand your business in WeHo</h2>
+            <p className="mt-4 text-lg text-gray-300">
+                Ready to scale? We have tax-credit programs for long-term leases, fast-track tenant-improvement permits, and district-level marketing via local BIDs.
+            </p>
+            <Button asChild className="mt-8" variant="secondary">
+                <Link href="#">Learn More</Link>
+            </Button>
+        </div>
+      </div>
+      
       <div id="find-your-district">
         <FindYourDistrictPage />
       </div>
