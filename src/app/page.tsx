@@ -15,6 +15,7 @@ import { ArrowLeft, ArrowRight, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import { Logoipsum } from "@/components/logoipsum";
 import { AvailableProperties } from "@/components/available-properties";
+import { AskQuestionForm } from "@/components/ask-question-form";
 
 
 const suggestedQuestions = [
@@ -255,6 +256,18 @@ export default function Home() {
                         </CardContent>
                     </Card>
                 ))}
+            </div>
+        </div>
+      </div>
+
+      <div className="py-16 md:py-24 lg:py-32">
+        <div className="container mx-auto px-4 md:px-6 text-center max-w-4xl">
+            <h2 className="text-4xl font-bold tracking-tight">Got more questions?</h2>
+            <p className="mt-4 text-lg text-muted-foreground">
+                Ask anything—from "How do I get a sidewalk café permit?" to "Where can I host a pop-up next month?" We're here 24/7.
+            </p>
+            <div className="mt-8">
+                <AskQuestionForm />
             </div>
         </div>
       </div>
