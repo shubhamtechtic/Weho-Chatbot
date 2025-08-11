@@ -64,16 +64,16 @@ export default function GrantFinderPage() {
 
   if (showResults) {
     return (
-        <div className="space-y-8">
+        <div className="space-y-8 container mx-auto px-4 md:px-6 py-12">
             <div className="text-center">
-                <h1 className="text-4xl font-bold text-primary font-headline">Matching Grants Found</h1>
+                <h1 className="text-4xl font-bold tracking-tight">Matching Grants Found</h1>
                 <p className="mt-2 text-lg text-muted-foreground">Based on your answers, here are some grants you may be eligible for.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {mockResults.map((grant) => (
                     <Card key={grant.title} className="flex flex-col">
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2"><Award className="text-accent" />{grant.title}</CardTitle>
+                            <CardTitle className="flex items-center gap-2"><Award className="text-foreground" />{grant.title}</CardTitle>
                             <CardDescription>{grant.description}</CardDescription>
                         </CardHeader>
                         <CardContent className="flex-grow">
@@ -93,10 +93,10 @@ export default function GrantFinderPage() {
   }
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center container mx-auto px-4 md:px-6 py-12">
         <div className="w-full max-w-2xl">
             <div className="text-center mb-8">
-                <h1 className="text-4xl font-bold text-primary font-headline">Grant Finder</h1>
+                <h1 className="text-4xl font-bold tracking-tight">Grant Finder</h1>
                 <p className="mt-2 text-lg text-muted-foreground">Answer a few questions to find grants for your business.</p>
             </div>
 
@@ -122,7 +122,7 @@ export default function GrantFinderPage() {
                 <Button variant="outline" onClick={handleBack} disabled={step === 0}>
                     <ArrowLeft className="mr-2 h-4 w-4" /> Back
                 </Button>
-                <Button onClick={handleNext} disabled={!answers[currentQuestion.id]} className="bg-accent hover:bg-accent/90">
+                <Button onClick={handleNext} disabled={!answers[currentQuestion.id]}>
                     {step === questions.length - 1 ? 'Finish' : 'Next'} <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
             </div>

@@ -25,7 +25,7 @@ function IncentiveCard({ incentive }: { incentive: Incentive }) {
         </div>
       </CardContent>
       <CardFooter>
-        <Button asChild className="w-full bg-accent hover:bg-accent/90">
+        <Button asChild className="w-full">
           <Link href={incentive.link}>
             Learn More <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
@@ -37,9 +37,9 @@ function IncentiveCard({ incentive }: { incentive: Incentive }) {
 
 export default function IncentivesPage() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 container mx-auto px-4 md:px-6 py-12">
       <div className="text-center">
-        <h1 className="text-4xl font-bold text-primary font-headline">Incentives Navigator</h1>
+        <h1 className="text-4xl font-bold tracking-tight">Incentives Navigator</h1>
         <p className="mt-2 text-lg text-muted-foreground">Discover the wide range of incentives for West Hollywood businesses.</p>
       </div>
 

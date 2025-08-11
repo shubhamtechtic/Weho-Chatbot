@@ -13,9 +13,9 @@ const steps = [
 
 export default function PreApplicationPage() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 container mx-auto px-4 md:px-6 py-12">
       <div className="text-center">
-        <h1 className="text-4xl font-bold text-primary font-headline">Business License Pre-Application</h1>
+        <h1 className="text-4xl font-bold tracking-tight">Business License Pre-Application</h1>
         <p className="mt-2 text-lg text-muted-foreground">Everything you need to know before you apply.</p>
       </div>
 
@@ -38,7 +38,7 @@ export default function PreApplicationPage() {
                   </li>
                 ))}
               </ul>
-              <Button asChild size="lg" className="mt-8 w-full sm:w-auto bg-accent hover:bg-accent/90">
+              <Button asChild size="lg" className="mt-8 w-full sm:w-auto">
                 <Link href="#">
                   Start Pre-Application Now <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>

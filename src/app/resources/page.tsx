@@ -6,9 +6,9 @@ import { Mail, Phone } from 'lucide-react';
 
 export default function ResourcesPage() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 container mx-auto px-4 md:px-6 py-12">
       <div className="text-center">
-        <h1 className="text-4xl font-bold text-primary font-headline">Resource Directory</h1>
+        <h1 className="text-4xl font-bold tracking-tight">Resource Directory</h1>
         <p className="mt-2 text-lg text-muted-foreground">Connect with key contacts in West Hollywood.</p>
       </div>
 
