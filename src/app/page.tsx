@@ -49,6 +49,17 @@ export default function Home() {
               </Card>
           </div>
       </div>
+      <div className="bg-gray-800 text-white py-16 px-4 md:px-6 text-center">
+        <div className="container mx-auto max-w-3xl">
+            <h2 className="text-4xl font-bold tracking-tight">Looking for a pop-up permit?</h2>
+            <p className="mt-4 text-lg text-gray-300">
+                Turn the city into an open-air market. Apply once, and we'll handle street closures, security coordination, and promotional boosts.
+            </p>
+            <Button asChild className="mt-8" variant="secondary">
+                <Link href="#">Apply</Link>
+            </Button>
+        </div>
+      </div>
       <div id="find-your-district">
         <FindYourDistrictPage />
       </div>
