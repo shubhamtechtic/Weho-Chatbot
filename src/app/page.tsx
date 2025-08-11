@@ -190,35 +190,6 @@ export default function Home() {
         </div>
       </div>
       
-      <div className="py-16 md:py-24 lg:py-32 bg-secondary/50">
-        <div className="container mx-auto px-4 md:px-6">
-            <div className="flex justify-between items-center mb-12">
-                <h2 className="text-4xl font-bold tracking-tight">News</h2>
-                <div className="flex gap-4">
-                    <Button variant="outline" size="icon"><ArrowLeft /></Button>
-                    <Button variant="outline" size="icon"><ArrowRight /></Button>
-                </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {testimonials.map((testimonial, index) => (
-                    <Card key={index} className="p-6">
-                        <CardContent className="p-0 flex flex-col h-full">
-                           <div className="flex-grow">
-                             <h3 className="text-xl font-bold mb-2">{testimonial.headline}</h3>
-                             <p className="text-muted-foreground mb-4">{testimonial.text}</p>
-                           </div>
-                           <div>
-                            <Logoipsum className="h-8 w-auto mb-4" />
-                            <p className="font-semibold">{testimonial.author.name}</p>
-                            <p className="text-sm text-muted-foreground">{testimonial.author.title}</p>
-                           </div>
-                        </CardContent>
-                    </Card>
-                ))}
-            </div>
-        </div>
-      </div>
-      
       <div id="find-your-district">
         <FindYourDistrictPage />
       </div>
@@ -255,6 +226,35 @@ export default function Home() {
                 <Card className="h-40 bg-secondary/50"></Card>
                 <Card className="h-40 bg-secondary/50"></Card>
                 <Card className="h-40 bg-secondary/50"></Card>
+            </div>
+        </div>
+      </div>
+      
+      <div className="py-16 md:py-24 lg:py-32 bg-secondary/50">
+        <div className="container mx-auto px-4 md:px-6">
+            <div className="flex justify-between items-center mb-12">
+                <h2 className="text-4xl font-bold tracking-tight">News</h2>
+                <div className="flex gap-4">
+                    <Button variant="outline" size="icon"><ArrowLeft /></Button>
+                    <Button variant="outline" size="icon"><ArrowRight /></Button>
+                </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {testimonials.map((testimonial, index) => (
+                    <Card key={index} className="p-6">
+                        <CardContent className="p-0 flex flex-col h-full">
+                           <div className="flex-grow">
+                             <h3 className="text-xl font-bold mb-2">{testimonial.headline}</h3>
+                             <p className="text-muted-foreground mb-4">{testimonial.text}</p>
+                           </div>
+                           <div>
+                            <Logoipsum className="h-8 w-auto mb-4" />
+                            <p className="font-semibold">{testimonial.author.name}</p>
+                            <p className="text-sm text-muted-foreground">{testimonial.author.title}</p>
+                           </div>
+                        </CardContent>
+                    </Card>
+                ))}
             </div>
         </div>
       </div>
