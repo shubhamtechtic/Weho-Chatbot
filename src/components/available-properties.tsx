@@ -4,25 +4,44 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { MapPin } from "lucide-react";
 
 const properties = [
     {
         title: "Retail and Multifamily",
         type: "Mixed-Use",
         auctionDate: "2025-07-21T23:59:59",
-        image: "https://placehold.co/600x400.png"
+        image: "https://placehold.co/600x400.png",
+        location: "12,706 SF Retail Elizabeth, NJ 07201",
+        features: [
+            "Keighry Head location near it all",
+            "Retail and multifamily value-add potential",
+            "Starting bid $1,100,000"
+        ]
     },
     {
         title: "Retail and Multifamily",
         type: "Mixed-Use",
         auctionDate: "2025-07-21T23:59:59",
-        image: "https://placehold.co/600x400.png"
+        image: "https://placehold.co/600x400.png",
+        location: "12,706 SF Retail Elizabeth, NJ 07201",
+        features: [
+            "Keighry Head location near it all",
+            "Retail and multifamily value-add potential",
+            "Starting bid $1,100,000"
+        ]
     },
     {
         title: "Retail and Multifamily",
         type: "Mixed-Use",
         auctionDate: "2025-07-21T23:59:59",
-        image: "https://placehold.co/600x400.png"
+        image: "https://placehold.co/600x400.png",
+        location: "12,706 SF Retail Elizabeth, NJ 07201",
+        features: [
+            "Keighry Head location near it all",
+            "Retail and multifamily value-add potential",
+            "Starting bid $1,100,000"
+        ]
     }
 ]
 
@@ -63,7 +82,7 @@ function Countdown({ date }: { date: string }) {
 
 function PropertyCard({ property }: { property: typeof properties[0] }) {
     return (
-        <Card className="overflow-hidden shadow-lg">
+        <Card className="overflow-hidden shadow-lg bg-card">
             <div className="relative">
                 <Image src={property.image} alt={property.title} width={600} height={400} className="w-full" data-ai-hint="commercial building" />
                 <div className="absolute bottom-0 left-0 right-0 bg-black/70 text-white p-4">
@@ -71,9 +90,21 @@ function PropertyCard({ property }: { property: typeof properties[0] }) {
                     <Countdown date={property.auctionDate} />
                 </div>
             </div>
-            <CardContent className="p-4 bg-card">
-                <h3 className="font-bold text-lg">{property.title}</h3>
-                <p className="text-muted-foreground">{property.type}</p>
+            <CardContent className="p-6 space-y-4">
+                <div>
+                    <h3 className="font-bold text-xl">{property.title}</h3>
+                    <p className="text-muted-foreground">{property.type}</p>
+                </div>
+                <div className="flex items-center text-sm text-muted-foreground">
+                    <MapPin className="w-4 h-4 mr-2 shrink-0" />
+                    <span>{property.location}</span>
+                </div>
+                <ul className="space-y-2 text-sm list-disc pl-5 text-muted-foreground">
+                    {property.features.map((feature, index) => (
+                        <li key={index}>{feature}</li>
+                    ))}
+                </ul>
+                <Button variant="outline" className="w-full">View documents</Button>
             </CardContent>
         </Card>
     )
