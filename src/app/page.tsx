@@ -1,3 +1,4 @@
+
 'use client';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,9 +13,9 @@ import FindYourDistrictPage from "./find-your-district/page";
 
 
 const suggestedQuestions = [
-    { text: "How do I get a business license?", href: "/pre-application" },
-    { text: "Are there any incentives?", href: "/incentives" },
-    { text: "What district best fits my business?", href: "/incentives" },
+    { text: "How do I get a business license?", href: "/#pre-application" },
+    { text: "Are there any incentives?", href: "/#incentives" },
+    { text: "What district best fits my business?", href: "/#find-your-district" },
 ]
 
 export default function Home() {
