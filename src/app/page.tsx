@@ -10,6 +10,9 @@ import PreApplicationPage from "./pre-application/page";
 import IncentiveAdvisorPage from "./incentive-advisor/page";
 import ResourcesPage from "./resources/page";
 import FindYourDistrictPage from "./find-your-district/page";
+import { ArrowLeft, ArrowRight, ShieldCheck } from "lucide-react";
+import Image from "next/image";
+import { Logoipsum } from "@/components/logoipsum";
 
 
 const suggestedQuestions = [
@@ -107,6 +110,34 @@ export default function Home() {
             <Button asChild className="mt-8" variant="secondary">
                 <Link href="#">Learn More</Link>
             </Button>
+        </div>
+      </div>
+
+      <div className="py-16 md:py-24 lg:py-32 bg-secondary/50">
+        <div className="container mx-auto px-4 md:px-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <div className="flex justify-between items-center mb-8">
+                        <p className="text-sm font-semibold tracking-widest uppercase text-muted-foreground">STARTED IN WEHO</p>
+                        <div className="flex gap-4">
+                            <Button variant="outline" size="icon"><ArrowLeft /></Button>
+                            <Button variant="outline" size="icon"><ArrowRight /></Button>
+                        </div>
+                    </div>
+                    <Logoipsum className="h-10 w-auto mb-6" />
+                    <p className="text-2xl font-medium leading-relaxed mb-6">
+                        We opened as a 1,100-square-foot coffee shop. Thirty years later The Abbey is a 16,000-square-foot global icon, because WeHo believes in bold ideas.
+                    </p>
+                    <p className="font-semibold">— David Cooley, Founder, The Abbey Food & Bar</p>
+                </div>
+                <div>
+                    <Card className="overflow-hidden">
+                        <div className="relative aspect-square w-full">
+                            <Image src="https://placehold.co/600x600.png" alt="The Abbey Food & Bar" layout="fill" objectFit="cover" data-ai-hint="restaurant interior" />
+                        </div>
+                    </Card>
+                </div>
+            </div>
         </div>
       </div>
       
