@@ -1,7 +1,7 @@
 
 'use client';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import IncentivesPage from "./incentives/page";
@@ -52,6 +52,26 @@ const testimonials = [
             name: 'Name Surname',
             title: 'JOB TITLE',
         }
+    }
+]
+
+const resources = [
+    {
+        title: "Interactive data tools",
+        description: "market profiles, labor stats, consumer spending"
+    },
+    {
+        title: "Chamber of Commerce",
+        description: "networking & advocacy"
+    },
+    {
+        title: "Business grants",
+        description: "ordinances and green-business grants"
+    },
+    {
+        title: "On-call Business Concierge",
+        description: "business@weho.org | 323-848-6429",
+        cta: "Contact us"
     }
 ]
 
@@ -193,6 +213,29 @@ export default function Home() {
       <div id="find-your-district">
         <FindYourDistrictPage />
       </div>
+
+      <div className="py-16 md:py-24 lg:py-32">
+        <div className="container mx-auto px-4 md:px-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {resources.map((resource, index) => (
+                    <Card key={index} className="p-6 text-center flex flex-col justify-between items-center h-full shadow-lg">
+                        <CardContent className="p-0 flex flex-col items-center">
+                           <div className="flex-grow flex flex-col justify-center items-center">
+                             <h3 className="text-xl font-bold mb-2">{resource.title}</h3>
+                             <p className="text-muted-foreground mb-4">{resource.description}</p>
+                           </div>
+                           {resource.cta && (
+                            <Button variant="outline" asChild>
+                                <Link href="#">{resource.cta}</Link>
+                            </Button>
+                           )}
+                        </CardContent>
+                    </Card>
+                ))}
+            </div>
+        </div>
+      </div>
+
       <div id="grant-finder">
         <GrantFinderPage />
       </div>
