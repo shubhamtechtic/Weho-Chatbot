@@ -5,8 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import GrantFinderPage from "./grant-finder/page";
-import ResourcesPage from "./resources/page";
 import FindYourDistrictPage from "./find-your-district/page";
 import { ArrowLeft, ArrowRight, ShieldCheck } from "lucide-react";
 import Image from "next/image";
@@ -294,13 +292,6 @@ export default function Home() {
       </div>
 
       <SiteFooter />
-
-      <div id="grant-finder">
-        <GrantFinderPage />
-      </div>
-      <div id="resources">
-        <ResourcesPage />
-      </div>
     </>
   );
 }
