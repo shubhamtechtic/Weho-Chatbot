@@ -11,6 +11,7 @@ import { Logoipsum } from "@/components/logoipsum";
 import { AvailableProperties } from "@/components/available-properties";
 import { AskQuestionForm } from "@/components/ask-question-form";
 import { SiteFooter } from "@/components/site-footer";
+import { NewsletterSignUp } from "@/components/newsletter-signup";
 
 
 const suggestedQuestions = [
@@ -281,6 +282,7 @@ export default function Home() {
         </div>
       </div>
 
+      <NewsletterSignUp />
       <SiteFooter />
     </>
   );
