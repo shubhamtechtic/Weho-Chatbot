@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Upload, Loader2, Trash2, RefreshCw } from 'lucide-react';
+import { Upload, Loader2, Trash2, RefreshCw, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast"
 
 type UploadedFile = {
@@ -21,12 +21,27 @@ const mockUploadedFiles: UploadedFile[] = [
     { name: 'zoning-map-weho.pdf', size: 2340, uploadDate: '2024-07-25' },
 ];
 
+type QueryLog = {
+    id: number;
+    question: string;
+    answer: string;
+    timestamp: string;
+    feedback: 'positive' | 'negative' | null;
+};
+
+const mockQueryLogs: QueryLog[] = [
+    { id: 1, question: 'How do I get a business license?', answer: 'You can start the pre-application process on our website...', timestamp: '2024-07-28 10:45:12', feedback: 'positive' },
+    { id: 2, question: 'Are there any incentives for green businesses?', answer: 'Yes, we offer several grants and tax credits for sustainable businesses...', timestamp: '2024-07-28 09:30:05', feedback: null },
+    { id: 3, question: 'What are the parking regulations for restaurants?', answer: 'Parking requirements depend on your restaurant\'s size and location...', timestamp: '2024-07-27 18:15:43', feedback: null },
+];
+
 
 export default function AdminPanelPage() {
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>(mockUploadedFiles);
   const [isRetraining, setIsRetraining] = useState(false);
+  const [queryLogs, setQueryLogs] = useState<QueryLog[]>(mockQueryLogs);
   const { toast } = useToast();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,6 +99,14 @@ export default function AdminPanelPage() {
         title: "Retraining Complete",
         description: "The AI model has been updated with the latest documents.",
     })
+  }
+
+  const handleFeedback = (logId: number, feedback: 'positive' | 'negative') => {
+    setQueryLogs(prevLogs => 
+        prevLogs.map(log => 
+            log.id === logId ? { ...log, feedback: log.feedback === feedback ? null : feedback } : log
+        )
+    );
   }
 
   return (
@@ -182,6 +205,56 @@ export default function AdminPanelPage() {
                         </>
                     )}
                 </Button>
+            </CardContent>
+        </Card>
+
+        <Card>
+            <CardHeader>
+                <CardTitle>Query Logs</CardTitle>
+                <CardDescription>
+                    Review user interactions with the chatbot and provide feedback.
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Question</TableHead>
+                            <TableHead>Answer</TableHead>
+                            <TableHead className="hidden md:table-cell">Timestamp</TableHead>
+                            <TableHead className="text-right">Feedback</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {queryLogs.map((log) => (
+                            <TableRow key={log.id}>
+                                <TableCell className="font-medium max-w-xs truncate">{log.question}</TableCell>
+                                <TableCell className="text-muted-foreground max-w-xs truncate">{log.answer}</TableCell>
+                                <TableCell className="hidden md:table-cell text-muted-foreground">{log.timestamp}</TableCell>
+                                <TableCell className="text-right space-x-1">
+                                    <Button 
+                                        variant={log.feedback === 'positive' ? 'secondary' : 'ghost'} 
+                                        size="icon" 
+                                        onClick={() => handleFeedback(log.id, 'positive')}
+                                        className={log.feedback === 'positive' ? 'text-green-500' : ''}
+                                        >
+                                        <ThumbsUp className="h-4 w-4" />
+                                        <span className="sr-only">Good</span>
+                                    </Button>
+                                    <Button 
+                                        variant={log.feedback === 'negative' ? 'secondary' : 'ghost'} 
+                                        size="icon" 
+                                        onClick={() => handleFeedback(log.id, 'negative')}
+                                        className={log.feedback === 'negative' ? 'text-red-500' : ''}
+                                        >
+                                        <ThumbsDown className="h-4 w-4" />
+                                        <span className="sr-only">Bad</span>
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
             </CardContent>
         </Card>
 
