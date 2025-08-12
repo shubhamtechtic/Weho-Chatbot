@@ -236,7 +236,7 @@ export default function AdminPanelPage() {
                                         variant={log.feedback === 'positive' ? 'secondary' : 'ghost'} 
                                         size="icon" 
                                         onClick={() => handleFeedback(log.id, 'positive')}
-                                        className={log.feedback === 'positive' ? 'text-green-500' : ''}
+                                        className={log.feedback === 'positive' ? 'text-green-500 hover:text-green-600' : ''}
                                         >
                                         <ThumbsUp className="h-4 w-4" />
                                         <span className="sr-only">Good</span>
@@ -245,7 +245,7 @@ export default function AdminPanelPage() {
                                         variant={log.feedback === 'negative' ? 'secondary' : 'ghost'} 
                                         size="icon" 
                                         onClick={() => handleFeedback(log.id, 'negative')}
-                                        className={log.feedback === 'negative' ? 'text-red-500' : ''}
+                                        className={log.feedback === 'negative' ? 'text-red-500 hover:text-red-600' : ''}
                                         >
                                         <ThumbsDown className="h-4 w-4" />
                                         <span className="sr-only">Bad</span>
