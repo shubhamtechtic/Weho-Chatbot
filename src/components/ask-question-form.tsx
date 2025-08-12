@@ -23,6 +23,7 @@ export function AskQuestionForm() {
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -32,7 +33,9 @@ export function AskQuestionForm() {
     scrollToBottom();
   }, [messages]);
 
-  async function handleQuestionSubmit(q: string) {
+  async function handleQuestionSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const q = question;
     if (!q || loading) return;
 
     setQuestion('');
@@ -102,8 +105,86 @@ export function AskQuestionForm() {
       console.error(e);
     } finally {
       setLoading(false);
+      inputRef.current?.focus();
     }
   }
+  
+  async function handleSuggestedQuestion(q: string) {
+    if (loading) return;
+    
+    // Immediately focus the input to prevent layout shifts from causing scrolls
+    inputRef.current?.focus();
+
+    setLoading(true);
+    const userMessage: Message = { role: 'user', text: q };
+    const botMessage: Message = { role: 'bot', text: '' };
+
+    setMessages((prev) => [...prev, userMessage, botMessage]);
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/v1/chatbot-v2/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'accept': 'application/json'
+        },
+        body: JSON.stringify({
+          query: q,
+          thread_id: 'default',
+          language: 'English',
+        }),
+      });
+
+      if (!response.body) {
+        throw new Error('Response body is null');
+      }
+      
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      
+      let buffer = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        
+        const parts = buffer.split('\n\n');
+        
+        for (let i = 0; i < parts.length - 1; i++) {
+            const part = parts[i];
+            if (part.startsWith('data: ')) {
+                const data = part.substring(6);
+                 setMessages((prev) => {
+                    const newMessages = [...prev];
+                    const lastMessage = newMessages[newMessages.length - 1];
+                    if (lastMessage && lastMessage.role === 'bot') {
+                        lastMessage.text += data;
+                    }
+                    return newMessages;
+                });
+            }
+        }
+        buffer = parts[parts.length - 1];
+      }
+
+
+    } catch (e) {
+      setMessages((prev) => {
+        const newMessages = [...prev];
+        const lastMessage = newMessages[newMessages.length - 1];
+        if (lastMessage.role === 'bot') {
+            lastMessage.text = 'Sorry, I encountered an error. Please try again.';
+        }
+        return newMessages
+      });
+      console.error(e);
+    } finally {
+      setLoading(false);
+      inputRef.current?.focus();
+    }
+  }
+
 
   return (
     <Card className="p-4 md:p-6 bg-card/50 text-left w-full">
@@ -145,10 +226,7 @@ export function AskQuestionForm() {
         </div>
 
         <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleQuestionSubmit(question);
-          }}
+          onSubmit={handleQuestionSubmit}
           className="space-y-4"
         >
           {messages.length === 0 && (
@@ -158,7 +236,7 @@ export function AskQuestionForm() {
                     key={q}
                     variant="secondary"
                     type="button"
-                    onClick={() => handleQuestionSubmit(q)}
+                    onClick={() => handleSuggestedQuestion(q)}
                     >
                     {q}
                     </Button>
@@ -167,6 +245,7 @@ export function AskQuestionForm() {
           )}
           <div className="flex gap-2">
             <Input
+              ref={inputRef}
               placeholder="Ask a question..."
               className="w-full text-base"
               value={question}
