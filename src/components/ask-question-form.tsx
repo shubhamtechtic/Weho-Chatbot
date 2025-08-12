@@ -31,7 +31,9 @@ export function AskQuestionForm() {
   };
 
   useEffect(() => {
-    scrollToBottom();
+    if (messages.length > 0) {
+      scrollToBottom();
+    }
   }, [messages]);
   
   const handleSubmit = async (q: string) => {
