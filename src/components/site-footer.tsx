@@ -65,11 +65,6 @@ export function SiteFooter() {
                             <li><a href="mailto:email@example.com" className="text-muted-foreground hover:text-foreground">email@example.com</a></li>
                             <li><a href="tel:+15555555555" className="text-muted-foreground hover:text-foreground">+1 555 555 555</a></li>
                             <li className="text-muted-foreground">455 N State Street, <br/> Los Angeles</li>
-                             <li className="mt-2">
-                                <Link href="/admin-panel" className="text-muted-foreground hover:text-foreground font-semibold text-sm">
-                                    Admin Panel
-                                </Link>
-                            </li>
                         </ul>
                     </div>
                 </div>
