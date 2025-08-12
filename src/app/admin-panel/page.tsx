@@ -1,15 +1,14 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
-import { Upload, Loader2, Trash2, ThumbsUp, ThumbsDown, Edit, TrendingUp } from 'lucide-react';
+import { Upload, Loader2, Trash2, ThumbsUp, ThumbsDown, Edit, TrendingUp, HelpCircle, CheckCircle, AlertCircle, FileUp } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast"
 
 type UploadedFile = {
@@ -38,15 +37,14 @@ const mockQueryLogs: QueryLog[] = [
     { id: 3, question: 'What are the parking regulations for restaurants?', answer: 'Parking requirements depend on your restaurant\'s size and location...', timestamp: '2024-07-27 18:15:43', feedback: null },
 ];
 
-const mockAnalyticsData = [
-  { date: '2024-07-22', queries: 45 },
-  { date: '2024-07-23', queries: 52 },
-  { date: '2024-07-24', queries: 68 },
-  { date: '2024-07-25', queries: 61 },
-  { date: '2024-07-26', queries: 75 },
-  { date: '2024-07-27', queries: 82 },
-  { date: '2024-07-28', queries: 90 },
-];
+type Metrics = {
+    upload_count: number;
+    query_count: number;
+    query_success: number;
+    query_errors: number;
+    avg_retrieve_latency: number;
+    avg_response_latency: number;
+};
 
 
 export default function AdminPanelPage() {
@@ -57,6 +55,32 @@ export default function AdminPanelPage() {
   const { toast } = useToast();
   const [editingLog, setEditingLog] = useState<QueryLog | null>(null);
   const [editedAnswer, setEditedAnswer] = useState('');
+  const [metrics, setMetrics] = useState<Metrics | null>(null);
+  const [metricsLoading, setMetricsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchMetrics() {
+        try {
+            setMetricsLoading(true);
+            const response = await fetch('http://127.0.0.1:8000/api/v1/chatbot-v2/metrics');
+            if (!response.ok) {
+                throw new Error('Failed to fetch metrics');
+            }
+            const data = await response.json();
+            setMetrics(data);
+        } catch (error) {
+            console.error(error);
+            toast({
+                title: "Failed to load metrics",
+                description: "Could not retrieve analytics data from the server.",
+                variant: "destructive"
+            })
+        } finally {
+            setMetricsLoading(false);
+        }
+    }
+    fetchMetrics();
+  }, [toast]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -236,24 +260,32 @@ export default function AdminPanelPage() {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <h3 className="font-semibold text-lg mb-4">Query Volume (Last 7 Days)</h3>
-                <div className="h-[250px]">
-                    <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={mockAnalyticsData}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="date" fontSize={12} tickLine={false} axisLine={false} />
-                            <YAxis fontSize={12} tickLine={false} axisLine={false} />
-                            <Tooltip
-                                contentStyle={{
-                                    backgroundColor: 'hsl(var(--background))',
-                                    borderColor: 'hsl(var(--border))'
-                                }}
-                            />
-                            <Legend />
-                            <Bar dataKey="queries" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-                        </BarChart>
-                    </ResponsiveContainer>
-                </div>
+                {metricsLoading ? (
+                    <div className="flex items-center justify-center h-24">
+                        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+                    </div>
+                ) : metrics ? (
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div className="p-4 bg-secondary rounded-lg">
+                            <h4 className="text-sm font-medium text-muted-foreground flex items-center gap-2"><HelpCircle /> Total Queries</h4>
+                            <p className="text-2xl font-bold">{metrics.query_count}</p>
+                        </div>
+                        <div className="p-4 bg-secondary rounded-lg">
+                            <h4 className="text-sm font-medium text-muted-foreground flex items-center gap-2"><CheckCircle /> Successful</h4>
+                            <p className="text-2xl font-bold">{metrics.query_success}</p>
+                        </div>
+                         <div className="p-4 bg-secondary rounded-lg">
+                            <h4 className="text-sm font-medium text-muted-foreground flex items-center gap-2"><AlertCircle /> Errors</h4>
+                            <p className="text-2xl font-bold">{metrics.query_errors}</p>
+                        </div>
+                        <div className="p-4 bg-secondary rounded-lg">
+                            <h4 className="text-sm font-medium text-muted-foreground flex items-center gap-2"><FileUp /> Documents</h4>
+                            <p className="text-2xl font-bold">{metrics.upload_count}</p>
+                        </div>
+                    </div>
+                ) : (
+                    <p className="text-muted-foreground">Could not load analytics data.</p>
+                )}
             </CardContent>
         </Card>
 
@@ -339,3 +371,5 @@ export default function AdminPanelPage() {
     </div>
   );
 }
+
+    
