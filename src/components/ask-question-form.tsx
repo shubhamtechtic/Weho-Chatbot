@@ -75,9 +75,9 @@ export function AskQuestionForm() {
         buffer += decoder.decode(value, { stream: true });
         
         const parts = buffer.split('\n\n');
+        buffer = parts.pop() || ''; // The last part might be incomplete
         
-        for (let i = 0; i < parts.length - 1; i++) {
-            const part = parts[i];
+        for (const part of parts) {
             if (part.startsWith('data: ')) {
                 const data = part.substring(6);
                  setMessages((prev) => {
@@ -90,7 +90,6 @@ export function AskQuestionForm() {
                 });
             }
         }
-        buffer = parts[parts.length - 1];
       }
 
 
@@ -150,9 +149,9 @@ export function AskQuestionForm() {
 
         buffer += decoder.decode(value, { stream: true });
         const parts = buffer.split('\n\n');
+        buffer = parts.pop() || ''; // The last part might be incomplete
         
-        for (let i = 0; i < parts.length - 1; i++) {
-          const part = parts[i];
+        for (const part of parts) {
           if (part.startsWith('data: ')) {
             const data = part.substring(6);
             setMessages((prev) => {
@@ -165,7 +164,6 @@ export function AskQuestionForm() {
             });
           }
         }
-        buffer = parts[parts.length - 1];
       }
 
 
