@@ -64,6 +64,7 @@ export function AskQuestionForm() {
       
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
+      let fullResponse = '';
       
       while (true) {
         const { done, value } = await reader.read();
@@ -74,20 +75,23 @@ export function AskQuestionForm() {
         
         for (const line of lines) {
             if (line.startsWith('data: ')) {
-                const data = line.substring(6);
+                const data = line.substring(6).trim();
                 if (data) {
-                    setMessages((prev) => {
-                        const newMessages = [...prev];
-                        const lastMessage = newMessages[newMessages.length - 1];
-                        if (lastMessage && lastMessage.role === 'bot') {
-                            lastMessage.text += data;
-                        }
-                        return newMessages;
-                    });
+                    fullResponse += data;
                 }
             }
         }
       }
+
+      setMessages((prev) => {
+        const newMessages = [...prev];
+        const lastMessage = newMessages[newMessages.length - 1];
+        if (lastMessage && lastMessage.role === 'bot') {
+            lastMessage.text = fullResponse;
+        }
+        return newMessages;
+      });
+
 
     } catch (e) {
       setMessages((prev) => {
@@ -133,6 +137,7 @@ export function AskQuestionForm() {
       
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
+      let fullResponse = '';
       
       while (true) {
         const { done, value } = await reader.read();
@@ -140,23 +145,26 @@ export function AskQuestionForm() {
 
         const chunk = decoder.decode(value, { stream: true });
         const lines = chunk.split('\n\n');
-
+        
         for (const line of lines) {
-          if (line.startsWith('data: ')) {
-            const data = line.substring(6);
-            if (data) {
-              setMessages((prev) => {
-                const newMessages = [...prev];
-                const lastMessage = newMessages[newMessages.length - 1];
-                if (lastMessage && lastMessage.role === 'bot') {
-                  lastMessage.text += data;
+            if (line.startsWith('data: ')) {
+                const data = line.substring(6).trim();
+                if (data) {
+                    fullResponse += data;
                 }
-                return newMessages;
-              });
             }
-          }
         }
       }
+      
+      setMessages((prev) => {
+        const newMessages = [...prev];
+        const lastMessage = newMessages[newMessages.length - 1];
+        if (lastMessage && lastMessage.role === 'bot') {
+            lastMessage.text = fullResponse;
+        }
+        return newMessages;
+      });
+
 
     } catch (e) {
       setMessages((prev) => {
