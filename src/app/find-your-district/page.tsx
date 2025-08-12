@@ -39,7 +39,7 @@ export default function FindYourDistrictPage() {
             </div>
             <div className="mt-12 relative">
                 <Image 
-                    src="https://storage.googleapis.com/stabl-media/6f8e7228-d85c-4860-a81d-8417c2f0e309.png" 
+                    src="https://placehold.co/1200x800.png" 
                     alt="Map of West Hollywood Districts"
                     width={1200}
                     height={800}
@@ -87,4 +87,3 @@ export default function FindYourDistrictPage() {
     </div>
   );
 }
-

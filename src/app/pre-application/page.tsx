@@ -49,8 +49,8 @@ export default function PreApplicationPage() {
             <Image
               src="https://placehold.co/600x600.png"
               alt="Person filling out a form"
-              layout="fill"
-              objectFit="cover"
+              fill
+              className="object-cover"
               data-ai-hint="document business"
             />
           </div>

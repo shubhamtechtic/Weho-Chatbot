@@ -170,7 +170,7 @@ export default function Home() {
                 <div>
                     <Card className="overflow-hidden">
                         <div className="relative aspect-square w-full">
-                            <Image src="https://placehold.co/600x600.png" alt="The Abbey Food & Bar" layout="fill" objectFit="cover" data-ai-hint="restaurant interior" />
+                            <Image src="https://placehold.co/600x600.png" alt="The Abbey Food & Bar" fill className="object-cover" data-ai-hint="restaurant interior" />
                         </div>
                     </Card>
                 </div>
