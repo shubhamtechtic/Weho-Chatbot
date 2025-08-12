@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Upload, Loader2, Trash2 } from 'lucide-react';
+import { Upload, Loader2, Trash2, RefreshCw } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast"
 
 type UploadedFile = {
@@ -26,6 +26,7 @@ export default function AdminPanelPage() {
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>(mockUploadedFiles);
+  const [isRetraining, setIsRetraining] = useState(false);
   const { toast } = useToast();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,6 +75,17 @@ export default function AdminPanelPage() {
     })
   }
 
+  const handleRetrain = async () => {
+    setIsRetraining(true);
+    // Simulate retraining delay
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    setIsRetraining(false);
+    toast({
+        title: "Retraining Complete",
+        description: "The AI model has been updated with the latest documents.",
+    })
+  }
+
   return (
     <div className="container mx-auto px-4 md:px-6 py-12">
       <div className="max-w-4xl mx-auto space-y-8">
@@ -92,12 +104,12 @@ export default function AdminPanelPage() {
                 type="file"
                 onChange={handleFileChange}
                 accept=".pdf,.txt,.md,.docx"
-                disabled={isUploading}
+                disabled={isUploading || isRetraining}
                 className="file:text-foreground"
               />
               {file && <p className="text-sm text-muted-foreground">Selected: {file.name}</p>}
             </div>
-            <Button onClick={handleUpload} disabled={!file || isUploading} className="w-full sm:w-auto">
+            <Button onClick={handleUpload} disabled={!file || isUploading || isRetraining} className="w-full sm:w-auto">
               {isUploading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -137,7 +149,7 @@ export default function AdminPanelPage() {
                                 <TableCell className="hidden sm:table-cell">{uploadedFile.size} KB</TableCell>
                                 <TableCell className="hidden md:table-cell">{uploadedFile.uploadDate}</TableCell>
                                 <TableCell className="text-right">
-                                    <Button variant="ghost" size="icon" onClick={() => handleDelete(uploadedFile.name)}>
+                                    <Button variant="ghost" size="icon" onClick={() => handleDelete(uploadedFile.name)} disabled={isRetraining}>
                                         <Trash2 className="h-4 w-4" />
                                         <span className="sr-only">Delete</span>
                                     </Button>
@@ -146,6 +158,30 @@ export default function AdminPanelPage() {
                         ))}
                     </TableBody>
                 </Table>
+            </CardContent>
+        </Card>
+
+        <Card>
+            <CardHeader>
+                <CardTitle>Model Retraining</CardTitle>
+                <CardDescription>
+                    Click the button below to retrain the AI model with the most recent set of uploaded documents.
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Button onClick={handleRetrain} disabled={isRetraining || isUploading}>
+                    {isRetraining ? (
+                        <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Retraining...
+                        </>
+                    ) : (
+                        <>
+                            <RefreshCw className="mr-2 h-4 w-4" />
+                            Retrain Model
+                        </>
+                    )}
+                </Button>
             </CardContent>
         </Card>
 
