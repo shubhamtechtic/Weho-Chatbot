@@ -5,10 +5,6 @@ import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import {
-  answerQuestion,
-  type AnswerQuestionOutput,
-} from '@/ai/flows/answer-question-flow';
 import { Loader2, Sparkles, User, Bot } from 'lucide-react';
 
 const suggestedQuestions = [
@@ -41,22 +37,68 @@ export function AskQuestionForm() {
 
     setQuestion('');
     setLoading(true);
-    setMessages((prev) => [...prev, { role: 'user', text: q }]);
+    const userMessage: Message = { role: 'user', text: q };
+    const botMessage: Message = { role: 'bot', text: '' };
+
+    setMessages((prev) => [...prev, userMessage, botMessage]);
 
     try {
-      const response = await answerQuestion({ question: q });
-      setMessages((prev) => [
-        ...prev,
-        { role: 'bot', text: response.answer },
-      ]);
-    } catch (e) {
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: 'bot',
-          text: 'Sorry, I encountered an error. Please try again.',
+      const response = await fetch('http://127.0.0.1:8000/api/v1/chatbot-v2/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'accept': 'application/json'
         },
-      ]);
+        body: JSON.stringify({
+          query: q,
+          thread_id: 'default',
+          language: 'English',
+        }),
+      });
+
+      if (!response.body) {
+        throw new Error('Response body is null');
+      }
+      
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      
+      let buffer = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        
+        const parts = buffer.split('\n\n');
+        
+        for (let i = 0; i < parts.length - 1; i++) {
+            const part = parts[i];
+            if (part.startsWith('data: ')) {
+                const data = part.substring(6);
+                 setMessages((prev) => {
+                    const newMessages = [...prev];
+                    const lastMessage = newMessages[newMessages.length - 1];
+                    if (lastMessage && lastMessage.role === 'bot') {
+                        lastMessage.text += data;
+                    }
+                    return newMessages;
+                });
+            }
+        }
+        buffer = parts[parts.length - 1];
+      }
+
+
+    } catch (e) {
+      setMessages((prev) => {
+        const newMessages = [...prev];
+        const lastMessage = newMessages[newMessages.length - 1];
+        if (lastMessage.role === 'bot') {
+            lastMessage.text = 'Sorry, I encountered an error. Please try again.';
+        }
+        return newMessages
+      });
       console.error(e);
     } finally {
       setLoading(false);
@@ -86,7 +128,11 @@ export function AskQuestionForm() {
                     : 'bg-secondary'
                 }`}
               >
-                <p className="text-sm whitespace-pre-wrap">{message.text}</p>
+                {message.text ? (
+                    <p className="text-sm whitespace-pre-wrap">{message.text}</p>
+                ) : (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                )}
               </div>
               {message.role === 'user' && (
                 <div className="p-2 bg-secondary rounded-full">
@@ -95,16 +141,6 @@ export function AskQuestionForm() {
               )}
             </div>
           ))}
-          {loading && (
-             <div className="flex items-start gap-3">
-                <div className="p-2 bg-primary rounded-full text-primary-foreground">
-                  <Bot className="w-5 h-5" />
-                </div>
-                <div className="p-3 rounded-lg bg-secondary">
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                </div>
-            </div>
-          )}
           <div ref={messagesEndRef} />
         </div>
 
