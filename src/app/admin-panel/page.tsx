@@ -6,7 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Upload, Loader2, Trash2, RefreshCw, ThumbsUp, ThumbsDown } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger } from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
+import { Upload, Loader2, Trash2, RefreshCw, ThumbsUp, ThumbsDown, Edit, TrendingUp } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast"
 
 type UploadedFile = {
@@ -35,6 +38,16 @@ const mockQueryLogs: QueryLog[] = [
     { id: 3, question: 'What are the parking regulations for restaurants?', answer: 'Parking requirements depend on your restaurant\'s size and location...', timestamp: '2024-07-27 18:15:43', feedback: null },
 ];
 
+const mockAnalyticsData = [
+  { date: '2024-07-22', queries: 45 },
+  { date: '2024-07-23', queries: 52 },
+  { date: '2024-07-24', queries: 68 },
+  { date: '2024-07-25', queries: 61 },
+  { date: '2024-07-26', queries: 75 },
+  { date: '2024-07-27', queries: 82 },
+  { date: '2024-07-28', queries: 90 },
+];
+
 
 export default function AdminPanelPage() {
   const [file, setFile] = useState<File | null>(null);
@@ -43,6 +56,8 @@ export default function AdminPanelPage() {
   const [isRetraining, setIsRetraining] = useState(false);
   const [queryLogs, setQueryLogs] = useState<QueryLog[]>(mockQueryLogs);
   const { toast } = useToast();
+  const [editingLog, setEditingLog] = useState<QueryLog | null>(null);
+  const [editedAnswer, setEditedAnswer] = useState('');
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -54,29 +69,20 @@ export default function AdminPanelPage() {
 
   const handleUpload = async () => {
     if (!file) return;
-
     setIsUploading(true);
-    
-    // Simulate upload delay
     await new Promise(resolve => setTimeout(resolve, 1500));
-
     const newFile: UploadedFile = {
         name: file.name,
         size: Math.round(file.size / 1024),
         uploadDate: new Date().toISOString().split('T')[0],
     }
-
     setUploadedFiles(prevFiles => [newFile, ...prevFiles]);
-    
     setIsUploading(false);
-    
     toast({
         title: "Upload Successful",
         description: `"${file.name}" has been uploaded.`,
     })
-
     setFile(null);
-    // Reset file input
     const fileInput = document.getElementById('file-upload') as HTMLInputElement;
     if(fileInput) fileInput.value = '';
   };
@@ -92,7 +98,6 @@ export default function AdminPanelPage() {
 
   const handleRetrain = async () => {
     setIsRetraining(true);
-    // Simulate retraining delay
     await new Promise(resolve => setTimeout(resolve, 3000));
     setIsRetraining(false);
     toast({
@@ -107,6 +112,28 @@ export default function AdminPanelPage() {
             log.id === logId ? { ...log, feedback: log.feedback === feedback ? null : feedback } : log
         )
     );
+  }
+
+  const handleEditClick = (log: QueryLog) => {
+    setEditingLog(log);
+    setEditedAnswer(log.answer);
+  }
+
+  const handleSaveEdit = () => {
+    if (!editingLog) return;
+
+    setQueryLogs(prevLogs => 
+      prevLogs.map(log => 
+        log.id === editingLog.id ? { ...log, answer: editedAnswer } : log
+      )
+    );
+
+    toast({
+      title: 'Answer Updated',
+      description: `The response for "${editingLog.question}" has been updated.`
+    })
+    
+    setEditingLog(null);
   }
 
   return (
@@ -210,9 +237,40 @@ export default function AdminPanelPage() {
 
         <Card>
             <CardHeader>
-                <CardTitle>Query Logs</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                    <TrendingUp className="h-5 w-5" /> Analytics
+                </CardTitle>
                 <CardDescription>
-                    Review user interactions with the chatbot and provide feedback.
+                    Usage metrics and feedback statistics.
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <h3 className="font-semibold text-lg mb-4">Query Volume (Last 7 Days)</h3>
+                <div className="h-[250px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={mockAnalyticsData}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="date" fontSize={12} tickLine={false} axisLine={false} />
+                            <YAxis fontSize={12} tickLine={false} axisLine={false} />
+                            <Tooltip
+                                contentStyle={{
+                                    backgroundColor: 'hsl(var(--background))',
+                                    borderColor: 'hsl(var(--border))'
+                                }}
+                            />
+                            <Legend />
+                            <Bar dataKey="queries" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                        </BarChart>
+                    </ResponsiveContainer>
+                </div>
+            </CardContent>
+        </Card>
+
+        <Card>
+            <CardHeader>
+                <CardTitle>Query Logs & Moderation</CardTitle>
+                <CardDescription>
+                    Review user interactions, provide feedback, and override incorrect answers.
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -222,7 +280,7 @@ export default function AdminPanelPage() {
                             <TableHead>Question</TableHead>
                             <TableHead>Answer</TableHead>
                             <TableHead className="hidden md:table-cell">Timestamp</TableHead>
-                            <TableHead className="text-right">Feedback</TableHead>
+                            <TableHead className="text-right">Actions</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -232,6 +290,14 @@ export default function AdminPanelPage() {
                                 <TableCell className="text-muted-foreground max-w-xs truncate">{log.answer}</TableCell>
                                 <TableCell className="hidden md:table-cell text-muted-foreground">{log.timestamp}</TableCell>
                                 <TableCell className="text-right space-x-1">
+                                    <Button 
+                                        variant="ghost" 
+                                        size="icon" 
+                                        onClick={() => handleEditClick(log)}
+                                        >
+                                        <Edit className="h-4 w-4" />
+                                        <span className="sr-only">Edit</span>
+                                    </Button>
                                     <Button 
                                         variant={log.feedback === 'positive' ? 'secondary' : 'ghost'} 
                                         size="icon" 
@@ -259,6 +325,26 @@ export default function AdminPanelPage() {
         </Card>
 
       </div>
+       <Dialog open={!!editingLog} onOpenChange={(open) => !open && setEditingLog(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit AI Response</DialogTitle>
+            <DialogDescription>
+              Modify the answer for the question: "{editingLog?.question}"
+            </DialogDescription>
+          </DialogHeader>
+          <Textarea 
+            value={editedAnswer}
+            onChange={(e) => setEditedAnswer(e.target.value)}
+            rows={8}
+            className="my-4"
+          />
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setEditingLog(null)}>Cancel</Button>
+            <Button onClick={handleSaveEdit}>Save Changes</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
