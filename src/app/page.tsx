@@ -91,7 +91,7 @@ export default function Home() {
                       The creative soul of LA is open for business. Launch, grow, and thrive at the epicenter of it all.
                   </p>
               </div>
-              <div className="mt-12 max-w-2xl mx-auto">
+              <div id="ask-a-question" className="mt-12 max-w-2xl mx-auto">
                 <AskQuestionForm />
               </div>
           </div>

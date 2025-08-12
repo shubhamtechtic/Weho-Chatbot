@@ -29,17 +29,17 @@ const navLinks = [
         label: 'Starting in WeHo',
         href: '#',
         items: [
-            { label: 'Grant Finder', href: '/#grant-finder' },
-            { label: 'Pre-Application', href: '/#pre-application' },
-            { label: 'AI Advisor', href: '/#incentive-advisor' },
+            { label: 'Grant Finder', href: '/grant-finder' },
+            { label: 'Pre-Application', href: '/pre-application' },
+            { label: 'AI Advisor', href: '/incentive-advisor' },
         ]
     },
     { 
         label: 'For Existing Businesses', 
         href: '#',
         items: [
-             { label: 'Incentives', href: '/#incentives' },
-             { label: 'Resource Directory', href: '/#resources' },
+             { label: 'Incentives', href: '/incentives' },
+             { label: 'Resource Directory', href: '/resources' },
         ]
     },
 ];
@@ -47,11 +47,11 @@ const navLinks = [
 const allLinks = [
     ...navLinks.flatMap(l => l.items ? [{label: l.label, href: l.href, isTitle: true}, ...l.items] : [{...l, isTitle: false}]),
     { label: 'Dashboard', href: '/', isTitle: false},
-    { label: 'Pre-Application', href: '/#pre-application', isTitle: false},
-    { label: 'Incentives', href: '/#incentives', isTitle: false },
-    { label: 'Grant Finder', href: '/#grant-finder', isTitle: false },
-    { label: 'AI Advisor', href: '/#incentive-advisor', isTitle: false },
-    { label: 'Resources', href: '/#resources', isTitle: false },
+    { label: 'Pre-Application', href: '/pre-application', isTitle: false},
+    { label: 'Incentives', href: '/incentives', isTitle: false },
+    { label: 'Grant Finder', href: '/grant-finder', isTitle: false },
+    { label: 'AI Advisor', href: '/incentive-advisor', isTitle: false },
+    { label: 'Resources', href: '/resources', isTitle: false },
     { label: 'Find Your District', href: '/#find-your-district', isTitle: false },
 ].filter((obj, index, self) => index === self.findIndex(o => o.label === obj.label && o.href === obj.href));
 
@@ -91,7 +91,7 @@ export function SiteHeader() {
           </nav>
           <div className="flex items-center gap-4">
             <Button variant="outline" className="hidden md:flex" asChild>
-              <Link href="#">Ask a question</Link>
+              <Link href="/#ask-a-question">Ask a question</Link>
             </Button>
             <Sheet>
               <SheetTrigger asChild>
@@ -101,9 +101,9 @@ export function SiteHeader() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="right">
-                <SheetHeader className="sr-only">
-                  <SheetTitle>Mobile Menu</SheetTitle>
-                  <SheetDescription>
+                <SheetHeader>
+                  <SheetTitle className="sr-only">Mobile Menu</SheetTitle>
+                  <SheetDescription className="sr-only">
                     Main navigation menu for mobile devices.
                   </SheetDescription>
                 </SheetHeader>
@@ -127,7 +127,7 @@ export function SiteHeader() {
                     ))}
                   </nav>
                   <Button variant="outline" className="mt-4" asChild>
-                    <Link href="#">Ask a question</Link>
+                    <Link href="/#ask-a-question">Ask a question</Link>
                   </Button>
                 </div>
               </SheetContent>
