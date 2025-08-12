@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '@/components/ui/sheet';
 import { ChevronDown, Menu, ArrowRight } from 'lucide-react';
 import { Logo } from './logo';
 import { usePathname } from 'next/navigation';
@@ -101,6 +101,12 @@ export function SiteHeader() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="right">
+                <SheetHeader className="sr-only">
+                  <SheetTitle>Mobile Menu</SheetTitle>
+                  <SheetDescription>
+                    Main navigation menu for mobile devices.
+                  </SheetDescription>
+                </SheetHeader>
                 <div className="flex flex-col gap-4 p-6">
                 <Link href="/">
                     <Logo />
