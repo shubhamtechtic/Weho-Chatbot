@@ -40,6 +40,7 @@ export function AskQuestionForm() {
 
     setQuestion('');
     setLoading(true);
+    inputRef.current?.focus();
     const userMessage: Message = { role: 'user', text: q };
     const botMessage: Message = { role: 'bot', text: '' };
 
@@ -148,22 +149,21 @@ export function AskQuestionForm() {
         if (done) break;
 
         buffer += decoder.decode(value, { stream: true });
-        
         const parts = buffer.split('\n\n');
         
         for (let i = 0; i < parts.length - 1; i++) {
-            const part = parts[i];
-            if (part.startsWith('data: ')) {
-                const data = part.substring(6);
-                 setMessages((prev) => {
-                    const newMessages = [...prev];
-                    const lastMessage = newMessages[newMessages.length - 1];
-                    if (lastMessage && lastMessage.role === 'bot') {
-                        lastMessage.text += data;
-                    }
-                    return newMessages;
-                });
-            }
+          const part = parts[i];
+          if (part.startsWith('data: ')) {
+            const data = part.substring(6);
+            setMessages((prev) => {
+              const newMessages = [...prev];
+              const lastMessage = newMessages[newMessages.length - 1];
+              if (lastMessage && lastMessage.role === 'bot') {
+                lastMessage.text += data;
+              }
+              return newMessages;
+            });
+          }
         }
         buffer = parts[parts.length - 1];
       }
