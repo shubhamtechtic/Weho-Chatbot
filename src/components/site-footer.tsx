@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "./logo";
+import { Separator } from "./ui/separator";
 
 const footerLinks = [
     {
@@ -67,6 +68,10 @@ export function SiteFooter() {
                             <li className="text-muted-foreground">455 N State Street, <br/> Los Angeles</li>
                         </ul>
                     </div>
+                </div>
+                <Separator className="my-8" />
+                <div className="text-center text-sm text-muted-foreground">
+                    © 2025 Weho. All Rights Reserved.
                 </div>
             </div>
         </footer>
