@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Loader2, Sparkles, User, Bot } from 'lucide-react';
+import { Markdown } from './markdown';
 
 const suggestedQuestions = [
   'How do I get a business license?',
@@ -32,16 +33,15 @@ export function AskQuestionForm() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
-
-  async function handleQuestionSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const q = question;
+  
+  const handleSubmit = async (q: string) => {
     if (!q || loading) return;
 
+    if (inputRef.current) {
+      inputRef.current.value = '';
+    }
     setQuestion('');
     setLoading(true);
-    inputRef.current?.focus();
-    
     setMessages((prev) => [...prev, { role: 'user', text: q }, { role: 'bot', text: '' }]);
 
     try {
@@ -61,28 +61,24 @@ export function AskQuestionForm() {
       if (!response.body) {
         throw new Error('Response body is null');
       }
-      
+
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let fullResponse = '';
-      
+
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-
         const chunk = decoder.decode(value, { stream: true });
-        const lines = chunk.split('\n\n');
         
-        for (const line of lines) {
-            if (line.startsWith('data: ')) {
-                const data = line.substring(6).trim();
-                if (data) {
-                    fullResponse += data;
-                }
-            }
+        // This regex looks for the "data: " prefix and extracts the content.
+        const lines = chunk.match(/data: (.*)/g);
+        if (lines) {
+          const newText = lines.map(line => line.substring(6)).join('');
+          fullResponse += newText;
         }
       }
-
+      
       setMessages((prev) => {
         const newMessages = [...prev];
         const lastMessage = newMessages[newMessages.length - 1];
@@ -92,95 +88,30 @@ export function AskQuestionForm() {
         return newMessages;
       });
 
-
     } catch (e) {
+      console.error(e);
       setMessages((prev) => {
         const newMessages = [...prev];
         const lastMessage = newMessages[newMessages.length - 1];
-        if (lastMessage.role === 'bot') {
-            lastMessage.text = 'Sorry, I encountered an error. Please try again.';
+        if (lastMessage && lastMessage.role === 'bot') {
+          lastMessage.text = 'Sorry, I encountered an error. Please try again.';
         }
-        return newMessages
+        return newMessages;
       });
-      console.error(e);
     } finally {
       setLoading(false);
       inputRef.current?.focus();
     }
   }
+
+  const handleQuestionSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    handleSubmit(question);
+  };
   
-  async function handleSuggestedQuestion(q: string) {
-    if (loading) return;
-    
-    inputRef.current?.focus();
-    setLoading(true);
-
-    setMessages((prev) => [...prev, { role: 'user', text: q }, { role: 'bot', text: '' }]);
-
-    try {
-      const response = await fetch('http://127.0.0.1:8000/api/v1/chatbot-v2/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'application/json'
-        },
-        body: JSON.stringify({
-          query: q,
-          thread_id: 'default',
-          language: 'English',
-        }),
-      });
-
-      if (!response.body) {
-        throw new Error('Response body is null');
-      }
-      
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let fullResponse = '';
-      
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        const chunk = decoder.decode(value, { stream: true });
-        const lines = chunk.split('\n\n');
-        
-        for (const line of lines) {
-            if (line.startsWith('data: ')) {
-                const data = line.substring(6).trim();
-                if (data) {
-                    fullResponse += data;
-                }
-            }
-        }
-      }
-      
-      setMessages((prev) => {
-        const newMessages = [...prev];
-        const lastMessage = newMessages[newMessages.length - 1];
-        if (lastMessage && lastMessage.role === 'bot') {
-            lastMessage.text = fullResponse;
-        }
-        return newMessages;
-      });
-
-
-    } catch (e) {
-      setMessages((prev) => {
-        const newMessages = [...prev];
-        const lastMessage = newMessages[newMessages.length - 1];
-        if (lastMessage.role === 'bot') {
-            lastMessage.text = 'Sorry, I encountered an error. Please try again.';
-        }
-        return newMessages
-      });
-      console.error(e);
-    } finally {
-      setLoading(false);
-      inputRef.current?.focus();
-    }
-  }
+  const handleSuggestedQuestion = async (q: string) => {
+    handleSubmit(q);
+  };
 
 
   return (
@@ -207,7 +138,7 @@ export function AskQuestionForm() {
                 }`}
               >
                 {message.text ? (
-                    <p className="text-sm whitespace-pre-wrap">{message.text}</p>
+                    <div className="text-sm whitespace-pre-wrap"><Markdown text={message.text} /></div>
                 ) : (
                     <Loader2 className="w-5 h-5 animate-spin" />
                 )}
