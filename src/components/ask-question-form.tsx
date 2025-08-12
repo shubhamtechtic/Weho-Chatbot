@@ -41,10 +41,9 @@ export function AskQuestionForm() {
     setQuestion('');
     setLoading(true);
     inputRef.current?.focus();
-    const userMessage: Message = { role: 'user', text: q };
-    const botMessage: Message = { role: 'bot', text: '' };
-
-    setMessages((prev) => [...prev, userMessage, botMessage]);
+    
+    // Add user message and an empty bot message placeholder
+    setMessages((prev) => [...prev, { role: 'user', text: q }, { role: 'bot', text: '' }]);
 
     try {
       const response = await fetch('http://127.0.0.1:8000/api/v1/chatbot-v2/chat', {
@@ -67,20 +66,17 @@ export function AskQuestionForm() {
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       
-      let buffer = '';
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
 
-        buffer += decoder.decode(value, { stream: true });
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split('\n\n').filter(line => line.startsWith('data: '));
         
-        const parts = buffer.split('\n\n');
-        buffer = parts.pop() || ''; // The last part might be incomplete
-        
-        for (const part of parts) {
-            if (part.startsWith('data: ')) {
-                const data = part.substring(6);
-                 setMessages((prev) => {
+        for (const line of lines) {
+            const data = line.substring(6);
+            if (data) {
+                setMessages((prev) => {
                     const newMessages = [...prev];
                     const lastMessage = newMessages[newMessages.length - 1];
                     if (lastMessage && lastMessage.role === 'bot') {
@@ -91,7 +87,6 @@ export function AskQuestionForm() {
             }
         }
       }
-
 
     } catch (e) {
       setMessages((prev) => {
@@ -112,17 +107,14 @@ export function AskQuestionForm() {
   async function handleSuggestedQuestion(q: string) {
     if (loading) return;
     
-    // Immediately focus the input to prevent layout shifts from causing scrolls
     inputRef.current?.focus();
-
     setLoading(true);
-    const userMessage: Message = { role: 'user', text: q };
-    const botMessage: Message = { role: 'bot', text: '' };
 
-    setMessages((prev) => [...prev, userMessage, botMessage]);
+    // Add user message and an empty bot message placeholder
+    setMessages((prev) => [...prev, { role: 'user', text: q }, { role: 'bot', text: '' }]);
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/v1/chatbot-v2/chat', {
+      const response = await fetch('http://12.7.0.0.1:8000/api/v1/chatbot-v2/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -142,18 +134,16 @@ export function AskQuestionForm() {
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       
-      let buffer = '';
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
 
-        buffer += decoder.decode(value, { stream: true });
-        const parts = buffer.split('\n\n');
-        buffer = parts.pop() || ''; // The last part might be incomplete
-        
-        for (const part of parts) {
-          if (part.startsWith('data: ')) {
-            const data = part.substring(6);
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split('\n\n').filter(line => line.startsWith('data: '));
+
+        for (const line of lines) {
+          const data = line.substring(6);
+          if (data) {
             setMessages((prev) => {
               const newMessages = [...prev];
               const lastMessage = newMessages[newMessages.length - 1];
@@ -165,7 +155,6 @@ export function AskQuestionForm() {
           }
         }
       }
-
 
     } catch (e) {
       setMessages((prev) => {
